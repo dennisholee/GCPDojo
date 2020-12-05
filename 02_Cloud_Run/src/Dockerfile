@@ -1,5 +1,7 @@
 FROM node:12
 
+ENV name world
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -16,4 +18,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 8080
-CMD [ "node", "index.js" ]
+CMD ["sh", "-c", "node index.js $name"]
