@@ -19,3 +19,18 @@ steps:
     - 'us-east1'
 images:
 - 'us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld'
+
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'functions'
+    - 'deploy'
+    - 'processor'
+    - '--region'
+    - 'us-east1'
+    - '--trigger-topic=cloudrun-dev-pub-msg-topic'
+    - '--runtime'
+    - 'nodejs10'
+    - '--entry-point'
+    - 'process'
+

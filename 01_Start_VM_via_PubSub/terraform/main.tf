@@ -101,3 +101,20 @@ resource "google_cloudfunctions_function" "function" {
     MY_ENV_VAR = "my-env-var-value"
   }
 }
+
+
+# ------------------------------------------------------------------------------
+# Schedule job
+# ------------------------------------------------------------------------------
+
+resource "google_cloud_scheduler_job" "job" {
+  name        = "poll-job"
+  description = "poll job"
+  schedule    = "*/1 * * * *"
+  region      = local.region
+
+  pubsub_target {
+    topic_name = google_pubsub_topic.pub-start-topic.id
+    data       = base64encode("Woody")
+  }
+}
