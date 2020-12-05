@@ -30,6 +30,8 @@ steps:
     - 'nodejs10'
     - '--entry-point'
     - 'process'
+    - '--source'
+    - 'processor'
 
 images:
 - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
