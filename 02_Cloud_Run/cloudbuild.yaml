@@ -12,5 +12,5 @@ steps:
     - 'us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld'
     - '--set-env-vars'
     - 'name=gamma'
-    - 'allow-unauthenticated'
+    - '--allow-unauthenticated'
 images: ['us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld']
