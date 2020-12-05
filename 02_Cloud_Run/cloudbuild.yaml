@@ -9,7 +9,7 @@ steps:
     - 'deploy' 
     - 'helloworld'
     - '--image'
-    - 'us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld'
+    - 'us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld:$COMMIT_SHA'
     - '--set-env-vars'
     - 'name=gamma'
     - '--allow-unauthenticated'
