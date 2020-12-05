@@ -17,4 +17,5 @@ steps:
     - 'managed'
     - '--region'
     - 'us-east1'
-images: ['us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld']
+images:
+  -'us-east1-docker.pkg.dev/$PROJECT_ID/docker-repo/helloworld:$COMMIT_SHA'
