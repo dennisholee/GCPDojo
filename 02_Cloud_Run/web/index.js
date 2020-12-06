@@ -1,18 +1,21 @@
 const args = require('minimist')(process.argv.slice(2))
 const express = require("express")
+const bodyParser = require('body-parser')
 const {PubSub} = require('@google-cloud/pubsub')
 
 console.log(args._[0])
 var app = express()
+var jsonParser = bodyParser.json()
+
 const pubsub = new PubSub()
 
 
-app.get("/", (req, rsp) => {
-  rsp.send("OK").status(200)
+app.get("/", (req, res) => {
+  res.send(`Hello ${args._[0]}`).status(200)
 })
 
-app.post("/", async(req, rsp) => {
-	if (!req.body.topic || !req.body.message) {
+app.post("/", jsonParser, async(req, res) => {
+  if (!req.body.topic || !req.body.message) {
     res
       .status(400)
       .send(
@@ -42,7 +45,6 @@ app.post("/", async(req, rsp) => {
     res.status(500).send(err);
     return Promise.reject(err);
   }
-	rsp.send(`Hello ${args._[0]}`).status(200)
 })
 
 app.listen(8080, () => console.log("Listening on port 8080"))
