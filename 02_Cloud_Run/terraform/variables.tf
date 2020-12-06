@@ -1,6 +1,6 @@
 variable project_id {}
 variable zone       {}
 variable region     {}
-variable public_key {} 
+# variable public_key {} 
 variable app        {}
 variable env        {}

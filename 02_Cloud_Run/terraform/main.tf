@@ -27,10 +27,10 @@ resource "google_artifact_registry_repository" "docker-repo" {
 # Adding SSH Public Key in Project Meta Data
 # ------------------------------------------------------------------------------
 
-resource "google_compute_project_metadata_item" "ssh-keys" {
-  key   = "ssh-keys"
-  value = "dennislee:${file("${var.public_key}")}"
-}
+# resource "google_compute_project_metadata_item" "ssh-keys" {
+#   key   = "ssh-keys"
+#   value = "dennislee:${file("${var.public_key}")}"
+# }
 
 #-------------------------------------------------------------------------------
 # Service Account
