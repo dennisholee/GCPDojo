@@ -13,7 +13,7 @@ locals {
 
 terraform {
   backend "gcs" {
-    bucket  = "${var.project_id}-tfstate"
+    bucket  = "tfstate"
     prefix  = "terraform/state"
   }
 }

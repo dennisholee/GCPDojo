@@ -18,14 +18,14 @@ steps:
   entrypoint: 'gsutil'
   args:
     - 'mb'
-    - 'gs://${PROJECT_ID}-tfstate'
+    - 'gs://tfstate'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gsutil'
   args:
     - 'versioning'
     - 'set'
     - 'on'
-    - 'gs://${PROJECT_ID}-tfstate'
+    - 'gs://tfstate'
 
 # [terraform]
 - name: 'hashicorp/terraform:0.12.29'
