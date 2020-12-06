@@ -31,7 +31,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform plan
+        terraform plan -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
         echo "=================================================="
         echo " Terraform Plan Finished" 
         echo "=================================================="
@@ -75,6 +75,10 @@ steps:
 #     - 'process'
 #     - '--source'
 #     - 'processor'
-# 
+
+substitutions:
+  _REGION: us-east1
+  _ZONE: us-east1-a
+   
 # images:
 # - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
