@@ -15,10 +15,11 @@ steps:
 
 # [GCS For Terraform Backend]
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'gsutil'
+  entrypoint: 'sh'
   args:
-    - 'mb'
-    - 'gs://${PROJECT_ID}-tfstate'
+    - '-c'
+    - |
+        gsutil mb gs://${PROJECT_ID}-tfstate || exit 0
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gsutil'
   args:
