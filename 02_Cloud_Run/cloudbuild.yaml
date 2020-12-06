@@ -11,7 +11,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['services', 'enable', 'cloudfunctions.googleapis.com']
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['build', 'services', 'enable', 'run.googleapis.com']
+  args: ['services', 'enable', 'run.googleapis.com']
 
 # [Terraform]
 - name: 'hashicorp/terraform:0.12.29'
