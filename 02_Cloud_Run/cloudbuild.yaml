@@ -18,14 +18,14 @@ steps:
   entrypoint: 'gsutil'
   args:
     - 'mb'
-    - 'gs://tfstate'
+    - 'gs://${PROJECT_ID}-tfstate'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gsutil'
   args:
     - 'versioning'
     - 'set'
     - 'on'
-    - 'gs://tfstate'
+    - 'gs://${PROJECT_ID}-tfstate'
 
 # [terraform]
 - name: 'hashicorp/terraform:0.12.29'
@@ -34,7 +34,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform init
+        terraform init -backend-config="${PROJECT_ID}-tfstate" -backend-config="prefix=terraform/state"
         echo "=================================================="
         echo " terraform init finished" 
         echo "=================================================="

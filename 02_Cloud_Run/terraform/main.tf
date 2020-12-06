@@ -12,10 +12,7 @@ locals {
 }
 
 terraform {
-  backend "gcs" {
-    bucket  = "tfstate"
-    prefix  = "terraform/state"
-  }
+  backend "gcs" {}
 }
 
 # ------------------------------------------------------------------------------
