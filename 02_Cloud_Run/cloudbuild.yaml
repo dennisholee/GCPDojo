@@ -1,14 +1,14 @@
 steps:
 # [Enable GCP APIs]
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['build', 'services', 'enable', 'iam.googleapis.com']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['build', 'services', 'enable', 'cloudresourcemanager.googleapis.com']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['build', 'services', 'enable', 'artifactregistry.googleapis.com']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['build', 'services', 'enable', 'cloudfunctions.googleapis.com']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['build', 'services', 'enable', 'run.googleapis.com']
 
 # [Terraform]
