@@ -11,6 +11,13 @@ locals {
   bucket        = "${var.project_id}-${local.appenv}"
 }
 
+terraform {
+  backend "gcs" {
+    bucket  = "tf-state-prod"
+    prefix  = "terraform/state"
+  }
+}
+
 # ------------------------------------------------------------------------------
 # Artifact Repository 
 # ------------------------------------------------------------------------------

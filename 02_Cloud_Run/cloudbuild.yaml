@@ -13,6 +13,20 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['services', 'enable', 'run.googleapis.com']
 
+# [GCS For Terraform Backend]
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gsutil'
+  args:
+    - 'mb'
+    - '${PROJECT_ID}-TFSTATE'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gsutil'
+  args:
+    - 'versioning'
+    - 'set'
+    - 'on'
+    - 'gs://${PROJECT_ID}-TFSTATE'
+
 # [Terraform]
 - name: 'hashicorp/terraform:0.12.29'
   entrypoint: 'sh'
