@@ -36,49 +36,59 @@ steps:
         echo " Terraform Plan Finished" 
         echo "=================================================="
 
+- name: 'hashicorp/terraform:0.12.29'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+        cd terraform
+        terraform apply -auto-approve -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+        echo "=================================================="
+        echo " Terraform Apply Finished" 
+        echo "=================================================="
 
 
-# # [Web]
-# - name:
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args:
-#     - 'run'
-#     - 'deploy' 
-#     - 'helloworld'
-#     - '--image'
-#     - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
-#     - '--set-env-vars'
-#     - 'name=gamma'
-#     - '--allow-unauthenticated'
-#     - '--platform'
-#     - 'managed'
-#     - '--region'
-#     - 'us-east1'
-# 
-# # [Processor]
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args:
-#     - 'functions'
-#     - 'deploy'
-#     - 'processor'
-#     - '--region'
-#     - 'us-east1'
-#     - '--trigger-topic'
-#     - 'cloudrun-dev-pub-msg-topic'
-#     - '--runtime'
-#     - 'nodejs10'
-#     - '--entry-point'
-#     - 'process'
-#     - '--source'
-#     - 'processor'
+# [Web]
+- name:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'run'
+    - 'deploy' 
+    - 'helloworld'
+    - '--image'
+    - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
+    - '--set-env-vars'
+    - 'name=gamma'
+    - '--allow-unauthenticated'
+    - '--platform'
+    - 'managed'
+    - '--region'
+    - 'us-east1'
+
+# [Processor]
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'functions'
+    - 'deploy'
+    - 'processor'
+    - '--region'
+    - 'us-east1'
+    - '--trigger-topic'
+    - 'cloudrun-dev-pub-msg-topic'
+    - '--runtime'
+    - 'nodejs10'
+    - '--entry-point'
+    - 'process'
+    - '--source'
+    - 'processor'
 
 substitutions:
   _REGION: us-east1
   _ZONE: us-east1-a
    
-# images:
-# - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
+images:
+- 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
