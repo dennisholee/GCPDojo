@@ -1,37 +1,78 @@
 steps:
+# [Enable GCP APIs]
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
+  args: ['build', 'services', 'enable', 'iam.googleapis.com']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'run'
-    - 'deploy' 
-    - 'helloworld'
-    - '--image'
-    - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
-    - '--set-env-vars'
-    - 'name=gamma'
-    - '--allow-unauthenticated'
-    - '--platform'
-    - 'managed'
-    - '--region'
-    - 'us-east1'
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'functions'
-    - 'deploy'
-    - 'processor'
-    - '--region'
-    - 'us-east1'
-    - '--trigger-topic'
-    - 'cloudrun-dev-pub-msg-topic'
-    - '--runtime'
-    - 'nodejs10'
-    - '--entry-point'
-    - 'process'
-    - '--source'
-    - 'processor'
+  args: ['build', 'services', 'enable', 'cloudresourcemanager.googleapis.com']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', 'services', 'enable', 'artifactregistry.googleapis.com']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', 'services', 'enable', 'cloudfunctions.googleapis.com']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', 'services', 'enable', 'run.googleapis.com']
 
-images:
-- 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
+# [Terraform]
+- name: 'hashicorp/terraform:0.12.29'
+  entrypoint: 'sh'
+  args:
+    - 'c'
+    - |
+        cd terraform
+        terraform init
+        echo "=================================================="
+        echo " Terraform Init Finished" 
+        echo "=================================================="
+
+- name: 'hashicorp/terraform:0.12.29'
+  entrypoint: 'sh'
+  args:
+    - 'c'
+    - |
+        cd terraform
+        terraform plan
+        echo "=================================================="
+        echo " Terraform Plan Finished" 
+        echo "=================================================="
+
+
+
+# # [Web]
+# - name:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   args:
+#     - 'run'
+#     - 'deploy' 
+#     - 'helloworld'
+#     - '--image'
+#     - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
+#     - '--set-env-vars'
+#     - 'name=gamma'
+#     - '--allow-unauthenticated'
+#     - '--platform'
+#     - 'managed'
+#     - '--region'
+#     - 'us-east1'
+# 
+# # [Processor]
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   args:
+#     - 'functions'
+#     - 'deploy'
+#     - 'processor'
+#     - '--region'
+#     - 'us-east1'
+#     - '--trigger-topic'
+#     - 'cloudrun-dev-pub-msg-topic'
+#     - '--runtime'
+#     - 'nodejs10'
+#     - '--entry-point'
+#     - 'process'
+#     - '--source'
+#     - 'processor'
+# 
+# images:
+# - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
