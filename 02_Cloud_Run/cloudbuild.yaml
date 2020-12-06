@@ -18,16 +18,16 @@ steps:
   entrypoint: 'gsutil'
   args:
     - 'mb'
-    - 'gs://${PROJECT_ID}-TFSTATE'
+    - 'gs://${PROJECT_ID}-tfstate'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gsutil'
   args:
     - 'versioning'
     - 'set'
     - 'on'
-    - 'gs://${PROJECT_ID}-TFSTATE'
+    - 'gs://${project_id}-tfstate'
 
-# [Terraform]
+# [terraform]
 - name: 'hashicorp/terraform:0.12.29'
   entrypoint: 'sh'
   args:
@@ -36,7 +36,7 @@ steps:
         cd terraform
         terraform init
         echo "=================================================="
-        echo " Terraform Init Finished" 
+        echo " terraform init finished" 
         echo "=================================================="
 
 - name: 'hashicorp/terraform:0.12.29'
@@ -45,9 +45,9 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform plan -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+        terraform plan -var project_id=${project_id} -var zone=${_zone} -var region=${_region} -var app=cloudrun -var env=dev 
         echo "=================================================="
-        echo " Terraform Plan Finished" 
+        echo " terraform plan finished" 
         echo "=================================================="
 
 - name: 'hashicorp/terraform:0.12.29'
@@ -56,24 +56,24 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform apply -auto-approve -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+        terraform apply -auto-approve -var project_id=${project_id} -var zone=${_zone} -var region=${_region} -var app=cloudrun -var env=dev 
         echo "=================================================="
-        echo " Terraform Apply Finished" 
+        echo " terraform apply finished" 
         echo "=================================================="
 
 
-# [Web]
+# [web]
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
+  args: ['build', '-t', 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
+  args: ['push', 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld']
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
     - 'run'
     - 'deploy' 
     - 'helloworld'
     - '--image'
-    - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
+    - 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld'
     - '--set-env-vars'
     - 'name=gamma'
     - '--allow-unauthenticated'
@@ -82,7 +82,7 @@ steps:
     - '--region'
     - 'us-east1'
 
-# [Processor]
+# [processor]
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
     - 'functions'
@@ -100,8 +100,8 @@ steps:
     - 'processor'
 
 substitutions:
-  _REGION: us-east1
-  _ZONE: us-east1-a
+  _region: us-east1
+  _zone: us-east1-a
    
 images:
 - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
