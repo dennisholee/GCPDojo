@@ -25,7 +25,7 @@ steps:
     - 'versioning'
     - 'set'
     - 'on'
-    - 'gs://${project_id}-tfstate'
+    - 'gs://${PROJECT_ID}-tfstate'
 
 # [terraform]
 - name: 'hashicorp/terraform:0.12.29'
@@ -45,7 +45,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform plan -var project_id=${project_id} -var zone=${_zone} -var region=${_region} -var app=cloudrun -var env=dev 
+        terraform plan -var PROJECT_ID=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
         echo "=================================================="
         echo " terraform plan finished" 
         echo "=================================================="
@@ -56,7 +56,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform apply -auto-approve -var project_id=${project_id} -var zone=${_zone} -var region=${_region} -var app=cloudrun -var env=dev 
+        terraform apply -auto-approve -var PROJECT_ID=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
         echo "=================================================="
         echo " terraform apply finished" 
         echo "=================================================="
@@ -64,16 +64,16 @@ steps:
 
 # [web]
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld', '.']
+  args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld']
+  args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
     - 'run'
     - 'deploy' 
     - 'helloworld'
     - '--image'
-    - 'us-east1-docker.pkg.dev/$project_id/cloudrun-dev-repository/helloworld'
+    - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
     - '--set-env-vars'
     - 'name=gamma'
     - '--allow-unauthenticated'
@@ -100,8 +100,8 @@ steps:
     - 'processor'
 
 substitutions:
-  _region: us-east1
-  _zone: us-east1-a
+  _REGION: us-east1
+  _ZONE: us-east1-a
    
 images:
 - 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld'
