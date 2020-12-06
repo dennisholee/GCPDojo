@@ -1,6 +1,8 @@
 steps:
 # [Enable GCP APIs]
 - name: 'gcr.io/cloud-builders/gcloud'
+  args: ['services', 'enable', 'serviceusage.googleapis.com']
+- name: 'gcr.io/cloud-builders/gcloud'
   args: ['services', 'enable', 'iam.googleapis.com']
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['services', 'enable', 'cloudresourcemanager.googleapis.com']
