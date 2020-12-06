@@ -49,7 +49,6 @@ steps:
 
 
 # [Web]
-- name:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
 - name: 'gcr.io/cloud-builders/docker'
