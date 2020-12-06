@@ -17,7 +17,7 @@ steps:
 - name: 'hashicorp/terraform:0.12.29'
   entrypoint: 'sh'
   args:
-    - 'c'
+    - '-c'
     - |
         cd terraform
         terraform init
@@ -28,7 +28,7 @@ steps:
 - name: 'hashicorp/terraform:0.12.29'
   entrypoint: 'sh'
   args:
-    - 'c'
+    - '-c'
     - |
         cd terraform
         terraform plan
