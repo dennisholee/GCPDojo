@@ -46,7 +46,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform plan -var PROJECT_ID=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+        terraform plan -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
         echo "=================================================="
         echo " terraform plan finished" 
         echo "=================================================="
