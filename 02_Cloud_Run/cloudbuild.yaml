@@ -8,6 +8,7 @@ steps:
 
 # [Enable GCP APIs]
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+  entrypoint: 'gcloud'
   args:
     - 'services'
     - 'enable'
