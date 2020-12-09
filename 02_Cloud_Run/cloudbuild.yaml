@@ -1,26 +1,32 @@
 steps:
+# [Enable Cached Docker Build] 
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --destination=gcr.io/$PROJECT_ID/image
+  - --cache=true
+  - --cache-ttl=6h
+
 # [Enable GCP APIs]
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'serviceusage.googleapis.com']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'iam.googleapis.com']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'cloudresourcemanager.googleapis.com']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'artifactregistry.googleapis.com']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'cloudfunctions.googleapis.com']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['services', 'enable', 'run.googleapis.com']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+  args:
+    - 'services'
+    - 'enable'
+    - 'serviceusage.googleapis.com'
+    - 'iam.googleapis.com'
+    - 'cloudresourcemanager.googleapis.com'
+    - 'artifactregistry.googleapis.com'
+    - 'cloudfunctions.googleapis.com'
+    - 'firestore.googleapis.com'
+    - 'run.googleapis.com'
 
 # [GCS For Terraform Backend]
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
   entrypoint: 'sh'
   args:
     - '-c'
     - |
         gsutil mb gs://${PROJECT_ID}-tfstate || exit 0
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
   entrypoint: 'gsutil'
   args:
     - 'versioning'
@@ -35,7 +41,7 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform init -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev -backend-config="bucket=${PROJECT_ID}-tfstate" -backend-config="prefix=terraform/state"
+        terraform init -backend-config="bucket=${PROJECT_ID}-tfstate" -backend-config="prefix=terraform/state"
         echo "=================================================="
         echo " terraform init finished" 
         echo "=================================================="

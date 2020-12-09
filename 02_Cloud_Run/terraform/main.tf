@@ -11,10 +11,6 @@ locals {
   bucket        = "${var.project_id}-${local.appenv}"
 }
 
-terraform {
-  backend "gcs" {}
-}
-
 # ------------------------------------------------------------------------------
 # Artifact Repository 
 # ------------------------------------------------------------------------------
@@ -87,8 +83,24 @@ resource "google_pubsub_subscription" "pub-bq-subscription" {
 # ------------------------------------------------------------------------------
 
 resource "google_storage_bucket" "image-bucket" {
-  name     = "${local.appenv}-bucket"
+  name     = "${local.appenv}-${var.project_id}-bucket"
 }
+
+# ------------------------------------------------------------------------------
+# Firestore
+# ------------------------------------------------------------------------------
+
+
+resource "google_app_engine_application" "firestore" {
+  project     = google_project.my_project.project_id
+  location_id = "us-central"
+  database_type = "CLOUD_FIRESTORE"
+}
+
+# ------------------------------------------------------------------------------
+# Cloud Memory Store
+# ------------------------------------------------------------------------------
+
 
 
 # # ------------------------------------------------------------------------------
@@ -117,3 +129,10 @@ resource "google_storage_bucket" "image-bucket" {
 #   timeout               = 60
 #   entry_point           = "process"
 # }
+
+
+# ------------------------------------------------------------------------------
+# Kubernetes Cluster
+# ------------------------------------------------------------------------------
+
+
