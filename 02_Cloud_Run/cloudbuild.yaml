@@ -19,6 +19,7 @@ steps:
     - 'cloudfunctions.googleapis.com'
     - 'firestore.googleapis.com'
     - 'run.googleapis.com'
+    - 'appengine.googleapis.com'
 
 # [GCS For Terraform Backend]
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
