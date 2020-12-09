@@ -13,7 +13,7 @@ exports.process = async(data, context) => {
   const payload = JSON.parse(Buffer.from(pubSubMessage.data, 'base64').toString())
 
   let collectionRef = firestore.collection('pokemon')
-  let documentRef  = await collectionRef.add(JSON.stringify(payload))
+  let documentRef  = await collectionRef.add({'foo','bar'})
 
   console.log(`Added document at ${documentRef.path})`);
 
