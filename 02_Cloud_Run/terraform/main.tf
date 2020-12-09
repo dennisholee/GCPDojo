@@ -82,9 +82,9 @@ resource "google_pubsub_subscription" "pub-bq-subscription" {
 # Cloud storage 
 # ------------------------------------------------------------------------------
 
-resource "google_storage_bucket" "image-bucket" {
-  name     = "${local.appenv}-${var.project_id}-bucket"
-}
+# resource "google_storage_bucket" "image-bucket" {
+#   name     = "${local.appenv}-${var.project_id}-bucket"
+# }
 
 # ------------------------------------------------------------------------------
 # Firestore
