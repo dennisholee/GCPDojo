@@ -92,7 +92,7 @@ resource "google_storage_bucket" "image-bucket" {
 
 
 resource "google_app_engine_application" "firestore" {
-  project     = google_project.my_project.project_id
+  project     = var.project_id
   location_id = "us-central"
   database_type = "CLOUD_FIRESTORE"
 }
