@@ -20,6 +20,7 @@ steps:
     - 'firestore.googleapis.com'
     - 'run.googleapis.com'
     - 'appengine.googleapis.com'
+  id: 'enable-gcp-api'
 
 # [GCS For Terraform Backend]
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
@@ -28,6 +29,7 @@ steps:
     - '-c'
     - |
         gsutil mb gs://${PROJECT_ID}-tfstate || exit 0
+
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
   entrypoint: 'gsutil'
   args:
@@ -48,16 +50,7 @@ steps:
         echo " terraform init finished" 
         echo "=================================================="
 
-- name: 'hashicorp/terraform:0.12.29'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
-        cd terraform
-        terraform plan -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
-        echo "=================================================="
-        echo " terraform plan finished" 
-        echo "=================================================="
+  waitFor: ['enable-gcp-api']
 
 - name: 'hashicorp/terraform:0.12.29'
   entrypoint: 'sh'
@@ -65,15 +58,43 @@ steps:
     - '-c'
     - |
         cd terraform
-        terraform apply -auto-approve -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
-        echo "=================================================="
-        echo " terraform apply finished" 
-        echo "=================================================="
+        terraform plan -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev -detailed-exitcode
+        case $? in
+        0)
+          echo "=================================================="
+          echo " terraform plan finished and apply skipped" 
+          echo "=================================================="
+          ;;
+        1)
+          echo "=================================================="
+          echo " terraform error"
+          echo "=================================================="
+          ;;
+        2)
+          terraform apply -auto-approve -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+          echo "=================================================="
+          echo " terraform plan and apply finished" 
+          echo "=================================================="
+          ;;
+        esac
+
+# - name: 'hashicorp/terraform:0.12.29'
+#   entrypoint: 'sh'
+#   args:
+#     - '-c'
+#     - |
+#         cd terraform
+#         terraform apply -auto-approve -var project_id=${PROJECT_ID} -var zone=${_ZONE} -var region=${_REGION} -var app=cloudrun -var env=dev 
+#         echo "=================================================="
+#         echo " terraform apply finished" 
+#         echo "=================================================="
 
 
 # [web]
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld', '.']
+  waitFor: ['enable-gcp-api']
+  
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudrun-dev-repository/helloworld']
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -107,6 +128,7 @@ steps:
     - 'process'
     - '--source'
     - 'processor'
+  waitFor: ['enable-gcp-api']
 
 substitutions:
   _REGION: us-east1
